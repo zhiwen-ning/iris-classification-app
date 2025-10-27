@@ -1,0 +1,10 @@
+artifact_location: file:///C:/Users/17723/Desktop/finalproject/iris-classification-app/mlruns/0/models/m-19c237d3e0d0428ebfbb2fc3699a46f2/artifacts
+creation_timestamp: 1761556614615
+experiment_id: '0'
+last_updated_timestamp: 1761556616986
+model_id: m-19c237d3e0d0428ebfbb2fc3699a46f2
+model_type: null
+name: baseline_model
+source_run_id: 16c719e951f840d0b5373eb820d410d1
+status: 2
+status_message: null

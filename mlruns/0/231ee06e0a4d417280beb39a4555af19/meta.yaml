@@ -1,0 +1,14 @@
+artifact_uri: file:///C:/Users/17723/Desktop/finalproject/iris-classification-app/mlruns/0/231ee06e0a4d417280beb39a4555af19/artifacts
+end_time: 1761556618876
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 231ee06e0a4d417280beb39a4555af19
+run_name: Improved Model
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1761556617003
+status: 3
+tags: []
+user_id: '17723'

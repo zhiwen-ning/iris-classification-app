@@ -1,0 +1,10 @@
+artifact_location: file:///C:/Users/17723/Desktop/finalproject/iris-classification-app/mlruns/800256991101703981/models/m-013e55c4d8ee476987883a2e2b86c107/artifacts
+creation_timestamp: 1761549762623
+experiment_id: '800256991101703981'
+last_updated_timestamp: 1761549764474
+model_id: m-013e55c4d8ee476987883a2e2b86c107
+model_type: null
+name: improved-model
+source_run_id: cc368f137a02494495de42b3387e3d07
+status: 2
+status_message: null

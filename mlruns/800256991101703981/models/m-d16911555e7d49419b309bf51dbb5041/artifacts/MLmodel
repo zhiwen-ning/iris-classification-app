@@ -1,0 +1,22 @@
+artifact_path: file:///C:/Users/17723/Desktop/finalproject/iris-classification-app/mlruns/800256991101703981/models/m-d16911555e7d49419b309bf51dbb5041/artifacts
+flavors:
+  python_function:
+    env:
+      conda: conda.yaml
+      virtualenv: python_env.yaml
+    loader_module: mlflow.sklearn
+    model_path: model.pkl
+    predict_fn: predict
+    python_version: 3.9.13
+  sklearn:
+    code: null
+    pickled_model: model.pkl
+    serialization_format: cloudpickle
+    sklearn_version: 1.6.1
+mlflow_version: 3.1.4
+model_id: m-d16911555e7d49419b309bf51dbb5041
+model_size_bytes: 981
+model_uuid: m-d16911555e7d49419b309bf51dbb5041
+prompts: null
+run_id: c5a19823068c43f484e74f9b78d9fa22
+utc_time_created: '2025-10-27 07:49:17.391037'
