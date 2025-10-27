@@ -1,0 +1,14 @@
+artifact_uri: file:///C:/Users/17723/Desktop/finalproject/iris-classification-app/mlruns/0/16c719e951f840d0b5373eb820d410d1/artifacts
+end_time: 1761556616997
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 16c719e951f840d0b5373eb820d410d1
+run_name: Baseline Model
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1761556614548
+status: 3
+tags: []
+user_id: '17723'

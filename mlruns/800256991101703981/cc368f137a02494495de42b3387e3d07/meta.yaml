@@ -1,0 +1,14 @@
+artifact_uri: file:///C:/Users/17723/Desktop/finalproject/iris-classification-app/mlruns/800256991101703981/cc368f137a02494495de42b3387e3d07/artifacts
+end_time: 1761549764523
+entry_point_name: ''
+experiment_id: '800256991101703981'
+lifecycle_stage: active
+run_id: cc368f137a02494495de42b3387e3d07
+run_name: Improved-LogisticRegression
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1761549762486
+status: 3
+tags: []
+user_id: '17723'

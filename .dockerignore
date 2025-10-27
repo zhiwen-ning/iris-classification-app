@@ -1,0 +1,7 @@
+data/  # 仅DVC指针，无需打包
+__pycache__/
+.venv/
+ml/tests/
+.git/
+.gitignore
+mlruns/.trash/
