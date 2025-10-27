@@ -36,13 +36,13 @@ def test_api_normal_response(client):
         "sepal_length": 5.1,
         "sepal_width": 3.5,
         "petal_length": 1.4,
-        "petal_width": 0.2
+        "petal_width": 0.2,
     }
     # 发送POST请求到/predict接口
     response = client.post(
         "/predict",
         data=json.dumps(request_data),
-        content_type="application/json"  # 明确指定JSON格式
+        content_type="application/json",  # 明确指定JSON格式
     )
 
     # 验证响应结果
@@ -52,8 +52,10 @@ def test_api_normal_response(client):
     assert "predicted_species" in result, "响应中缺少'predicted_species'字段"
     assert "label" in result, "响应中缺少'label'字段（数字标签）"
     # 验证预测结果合理性（应为setosa相关标签，具体值根据编码映射调整）
-    assert result["predicted_species"].lower() in ["iris-setosa", "setosa"], \
-        f"预期预测为setosa，实际为{result['predicted_species']}"
+    assert result["predicted_species"].lower() in [
+        "iris-setosa",
+        "setosa",
+    ], f"预期预测为setosa，实际为{result['predicted_species']}"
 
 
 def test_api_missing_param(client):
@@ -62,19 +64,20 @@ def test_api_missing_param(client):
     request_data = {
         "sepal_length": 5.1,
         "sepal_width": 3.5,
-        "petal_length": 1.4
+        "petal_length": 1.4,
         # 故意遗漏petal_width
     }
     # 发送POST请求
     response = client.post(
-        "/predict",
-        data=json.dumps(request_data),
-        content_type="application/json"
+        "/predict", data=json.dumps(request_data), content_type="application/json"
     )
 
     # 验证错误响应
-    assert response.status_code == 400, f"预期状态码400（参数错误），实际为{response.status_code}"
+    assert (
+        response.status_code == 400
+    ), f"预期状态码400（参数错误），实际为{response.status_code}"
     result = json.loads(response.data)
     assert result["status"] == "fail", f"预期状态'fail'，实际为{result['status']}"
-    assert "缺少参数" in result["error"] or "petal_width" in result["error"], \
-        f"错误信息未提示缺少参数，实际为{result['error']}"
+    assert (
+        "缺少参数" in result["error"] or "petal_width" in result["error"]
+    ), f"错误信息未提示缺少参数，实际为{result['error']}"
