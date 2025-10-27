@@ -1,0 +1,56 @@
+name: Iris App CI/CD
+on:
+  pull_request:
+    branches: [dev, staging, main]  # 受保护分支，PR触发CI
+  push:
+    branches: [staging, main]  # 合并到staging/main触发镜像构建
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.9"
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Lint with flake8
+        run: flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+      - name: Format check with black
+        run: black --check .
+      - name: Run tests
+        run: pytest app/tests/ -v
+      - name: Build Docker image
+        run: docker build -t iris-app:${{ github.sha }} .
+
+  cd-staging:
+    needs: ci
+    if: github.event_name == 'push' && github.ref == 'refs/heads/staging'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Create staging .env
+        run: |
+          echo "MODEL_PATH=./mlruns/0/e7f8a9b/artifacts/improved_model" > .env
+          echo "PORT=5000" >> .env
+        env:
+          DB_PASSWORD: ${{ secrets.STAGING_DB_PASSWORD }}  # 从GitHub Secrets获取
+      - name: Build staging image
+        run: docker build -t iris-app-staging:${{ github.sha }} .
+
+  cd-prod:
+    needs: ci
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Create production .env
+        run: |
+          echo "MODEL_PATH=./mlruns/0/e7f8a9b/artifacts/improved_model" > .env
+          echo "PORT=5000" >> .env
+        env:
+          DB_PASSWORD: ${{ secrets.PROD_DB_PASSWORD }}  # 从GitHub Secrets获取
+      - name: Build production image
+        run: docker build -t iris-app-prod:${{ github.sha }} .

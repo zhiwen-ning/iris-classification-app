@@ -1,0 +1,7 @@
+# ml/configs/train_config.yml（UTF-8编码，无特殊字符）
+baseline:
+  max_iter: 100  # 基准模型：逻辑回归迭代次数
+
+improved:
+  max_iter: 200  # 优化模型：增加迭代次数确保收敛
+  C: 0.8         # 正则化参数：控制过拟合

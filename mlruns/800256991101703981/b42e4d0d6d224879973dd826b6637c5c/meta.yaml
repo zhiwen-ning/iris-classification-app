@@ -1,0 +1,14 @@
+artifact_uri: file:///C:/Users/17723/Desktop/finalproject/iris-classification-app/mlruns/800256991101703981/b42e4d0d6d224879973dd826b6637c5c/artifacts
+end_time: 1761549762480
+entry_point_name: ''
+experiment_id: '800256991101703981'
+lifecycle_stage: active
+run_id: b42e4d0d6d224879973dd826b6637c5c
+run_name: Baseline-LogisticRegression
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1761549757179
+status: 3
+tags: []
+user_id: '17723'
