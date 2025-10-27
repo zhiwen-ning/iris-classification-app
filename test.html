@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>鸢尾花分类预测</title>
+  <style>
+    body { font-family: Arial; max-width: 600px; margin: 20px auto; padding: 0 20px; }
+    label { display: block; margin: 10px 0 5px; }
+    input { width: 100%; padding: 8px; margin-bottom: 15px; box-sizing: border-box; border: 1px solid #ddd; border-radius: 4px; }
+    button { padding: 10px 20px; background: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; transition: background 0.3s; }
+    button:hover { background: #0056b3; }
+    button:disabled { background: #6c757d; cursor: not-allowed; } /* 加载时按钮禁用 */
+    #result { margin-top: 20px; padding: 10px; background: #f8f9fa; border-radius: 4px; display: none; } /* 默认隐藏结果区 */
+    .success { color: #198754; border-left: 4px solid #198754; } /* 成功样式 */
+    .error { color: #dc3545; border-left: 4px solid #dc3545; } /* 错误样式 */
+
+    /* 弹窗样式 */
+    .modal {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 1000;
+      opacity: 0; visibility: hidden; transition: all 0.3s; /* 淡入动画 */
+    }
+    .modal.show {
+      opacity: 1; visibility: visible; /* 显示弹窗 */
+    }
+    .modal-content {
+      background: white; padding: 30px; border-radius: 8px; width: 90%; max-width: 400px; text-align: center;
+      transform: translateY(-20px); transition: transform 0.3s;
+    }
+    .modal.show .modal-content {
+      transform: translateY(0); /* 弹窗下移动画 */
+    }
+    .modal-title { margin-top: 0; color: #198754; }
+    .modal-btn { margin-top: 20px; padding: 8px 20px; background: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <h1>鸢尾花分类预测工具</h1>
+  <form id="predictForm">
+    <label>花萼长度 (sepal_length)：</label>
+    <input type="number" step="0.1" name="sepal_length" value="5.1" required>
+
+    <label>花萼宽度 (sepal_width)：</label>
+    <input type="number" step="0.1" name="sepal_width" value="3.5" required>
+
+    <label>花瓣长度 (petal_length)：</label>
+    <input type="number" step="0.1" name="petal_length" value="1.4" required>
+
+    <label>花瓣宽度 (petal_width)：</label>
+    <input type="number" step="0.1" name="petal_width" value="0.2" required>
+
+    <button type="submit" id="predictBtn">点击预测</button>
+  </form>
+
+  <!-- 结果显示区 -->
+  <h3>预测结果：</h3>
+  <div id="result"></div>
+
+  <!-- 成功弹窗（默认隐藏） -->
+  <div class="modal" id="successModal">
+    <div class="modal-content">
+      <h2 class="modal-title">预测成功！</h2>
+      <p id="modalResult"></p> <!-- 弹窗内显示结果 -->
+      <button class="modal-btn" id="closeModal">确定</button>
+    </div>
+  </div>
+
+  <script>
+    // 获取DOM元素
+    const form = document.getElementById("predictForm");
+    const predictBtn = document.getElementById("predictBtn");
+    const resultDiv = document.getElementById("result");
+    const successModal = document.getElementById("successModal");
+    const modalResult = document.getElementById("modalResult");
+    const closeModal = document.getElementById("closeModal");
+
+    // 表单提交事件
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault(); // 阻止页面刷新
+      const formData = new FormData(e.target);
+      const data = Object.fromEntries(formData.entries());
+
+      // 1. 加载状态：按钮禁用+显示加载文本
+      predictBtn.disabled = true;
+      predictBtn.textContent = "预测中...";
+      resultDiv.style.display = "none"; // 隐藏之前的结果
+
+      try {
+        // 2. 发送请求
+        const response = await fetch("http://127.0.0.1:5000/predict", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data)
+        });
+
+        if (!response.ok) {
+          // 处理HTTP错误（如400参数错、500服务错）
+          const errorData = await response.json();
+          throw new Error(errorData.error || "服务器请求失败");
+        }
+
+        // 3. 预测成功：显示弹窗+结果区
+        const result = await response.json();
+        const resultText = `状态：${result.status} | 预测品种：${result.predicted_species} | 品种标签：${result.label}`;
+        
+        // 弹窗显示结果
+        modalResult.textContent = resultText;
+        successModal.classList.add("show");
+        
+        // 结果区显示成功样式
+        resultDiv.className = "success";
+        resultDiv.textContent = `✅ ${resultText}`;
+        resultDiv.style.display = "block";
+
+      } catch (error) {
+        // 4. 预测失败：只显示结果区（不弹窗）
+        resultDiv.className = "error";
+        resultDiv.textContent = `❌ 请求失败：${error.message}`;
+        resultDiv.style.display = "block";
+
+      } finally {
+        // 5. 恢复按钮状态（无论成功/失败）
+        predictBtn.disabled = false;
+        predictBtn.textContent = "点击预测";
+      }
+    });
+
+    // 关闭弹窗
+    closeModal.addEventListener("click", () => {
+      successModal.classList.remove("show");
+    });
+
+    // 点击弹窗外部也能关闭
+    successModal.addEventListener("click", (e) => {
+      if (e.target === successModal) {
+        successModal.classList.remove("show");
+      }
+    });
+  </script>
+</body> 
+</html>

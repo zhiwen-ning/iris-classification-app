@@ -1,12 +1,17 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS  # 导入跨域模块（已存在，新增调用）
 import mlflow.sklearn
 import pandas as pd
 import os
 import yaml
 from dotenv import load_dotenv
 
+# 加载环境变量
 load_dotenv()
+
+# 初始化Flask app → 新增跨域配置 CORS(app)
 app = Flask(__name__)
+CORS(app)  # 关键：启用跨域，允许所有源访问（测试环境安全，解决前端fetch问题）
 
 
 # --------------------------
